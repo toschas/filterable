@@ -1,8 +1,6 @@
 # Filterable
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/filterable`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+Filterable is a ruby gem providing easy filtering of Active Record objects.
 
 ## Installation
 
@@ -22,7 +20,16 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+### Define which attributes can be filtered by:
+```ruby
+class Post < ActiveRecord::Base
+  filter_by :active, :published
+end
+```
+### Call filter passing the params
+```ruby
+Post.filter({by_active: true, by_published: true, by_title: 'Test'}) # => returns posts where active: true and published: true, by_title will be ignored.
+```
 
 ## Development
 
