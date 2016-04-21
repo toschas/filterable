@@ -1,6 +1,6 @@
 module Filterable
-  class Railtie < Rails::Railtie
-    initializer "railtie.configure_rails_initialization" do
+  class Hook
+    def self.init
       ActiveSupport.on_load(:active_record) do
         include Filterable::Base
       end

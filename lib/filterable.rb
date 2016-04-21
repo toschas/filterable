@@ -1,7 +1,9 @@
 require "filterable/version"
+require "active_record"
 require "filterable/base"
-require "filterable/railtie"
+require "filterable/hook"
 require "filterable/filter"
 
 module Filterable
+  Hook.init
 end
