@@ -4,6 +4,10 @@ require 'support/schema_helper'
 module Filterable
   describe Generator do
     describe '.generate' do
+      before :all do 
+        class SimpleModel < ActiveRecord::Base; end
+      end
+
       it 'generates filter methods' do
         Generator.new(SimpleModel, [:name, :title]).generate
 

@@ -2,7 +2,7 @@ require 'spec_helper'
 
 module Filterable
   describe Base do
-    before :each do 
+    before :all do 
       class SimpleModel < ActiveRecord::Base; end
     end
 
