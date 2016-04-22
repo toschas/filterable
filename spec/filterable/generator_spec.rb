@@ -3,12 +3,6 @@ require 'support/schema_helper'
 
 module Filterable
  describe Generator do
-   before :all do
-     SchemaHelper.new
-       .connect_to('sqlite3', ':memory:')
-       .generate_model('simple_model', { name: 'string', title: 'string' })
-   end
-
    describe '.generate' do
      it 'generates filter methods' do
        Generator.new(SimpleModel, [:name, :title]).generate
