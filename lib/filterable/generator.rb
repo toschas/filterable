@@ -29,12 +29,30 @@ module Filterable
     end
 
     def generate_scopes
-      filters.each do |filt|
-        model.define_singleton_method(
-          "by_#{filt}", 
-          ->(value) { send(:where, { filt => value }) }
-        )
+      filters.each do |filter|
+        if filter.is_a?(Hash)
+          generate_joined_model_scope filter
+        else
+          generate_model_scope filter
+        end
       end
+    end
+
+    def generate_joined_model_scope(filter)
+      model.define_singleton_method(
+        "by_#{filter.keys.first}_#{filter.values.first}",
+        ->(value) { 
+          send(:joins, filter.keys.first)
+            .send(:where, { filter.keys.first => { filter.values.first => value } })
+        } 
+      )
+    end
+
+    def generate_model_scope(filter)
+      model.define_singleton_method(
+        "by_#{filter}", 
+        ->(value) { send(:where, { filter => value }) }
+      )
     end
   end
 end
