@@ -10,9 +10,11 @@ module Filterable
       expect(SimpleModel).to respond_to :filter_by
     end
 
-    it 'calls #generate on Filter when .filter_by is invoked' do
+    it 'calls #generate on Generator when .filter_by is invoked' do
       filters = [:name, :title]
-      expect(Filter).to receive(:generate).with(SimpleModel, filters)
+      generator = double(Generator.new(SimpleModel, filters))
+      expect(Generator).to receive(:new).with(SimpleModel, filters).and_return(generator)
+      expect(generator).to receive(:generate)
 
       SimpleModel.filter_by *filters
     end

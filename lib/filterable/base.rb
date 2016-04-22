@@ -2,7 +2,7 @@ module Filterable
   module Base
     module ClassMethods
       def filter_by(*args)
-        Filter.generate(self, args)
+        Generator.new(self, args).generate
       end
     end
 
