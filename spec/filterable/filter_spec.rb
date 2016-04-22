@@ -33,18 +33,15 @@ module Filterable
        Filter.generate(SimpleModel, [:name, :title])
      end
 
-     it 'calls each method from the params' do
-       skip 'should check sql instead'
+     it 'queries by each param if filter defined' do
        params = { by_name: 'test', by_title: 'test' }
-
-       params.each do |key, value|
-         allow(SimpleModel::ActiveRecord_Relation).to receive(key).and_call_original
-       end
 
        result = SimpleModel.filter params
 
        params.each do |key, value|
-         expect(result).to have_received(key).with(value)
+         column_name = key.to_s.split('by_').last
+         pattern = /"simple_models"."#{column_name}" = '#{value}'/
+         expect(pattern.match(result.to_sql)).not_to be_nil
        end
      end
 
@@ -54,6 +51,11 @@ module Filterable
 
      it 'ignores params for which filter is not defined' do
        expect { SimpleModel.filter(by_unknown_attribute: 'test') }.not_to raise_error
+       expect(
+         /"simple_models"."unknown_attribute"/.match(
+           SimpleModel.filter(by_unknown_attribute: 'test').to_sql
+         )
+       ).to be_nil
      end
 
      it 'ignores params where value is empty' do
