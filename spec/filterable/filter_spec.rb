@@ -1,21 +1,11 @@
 require 'spec_helper'
+require 'support/schema_helper'
 
 module Filterable
  describe Filter do
    before :all do
-     ActiveRecord::Base.establish_connection(
-       adapter: 'sqlite3',
-       database: ':memory:'
-     )
-
-     ActiveRecord::Schema.define do
-       create_table :simple_models, force: true do |t|
-         t.string :name
-         t.string :title
-       end
-     end
-
-     class SimpleModel < ActiveRecord::Base; end
+     SchemaHelper.new.connect_to('sqlite3', ':memory:')
+       .generate_model('simple_model', { name: 'string', title: 'string' })
    end
 
    describe '.generate' do
@@ -61,6 +51,10 @@ module Filterable
      it 'ignores params where value is empty' do
        expect(SimpleModel).not_to receive :by_name
        SimpleModel.filter(by_name: '')
+     end
+
+     it 'supports joined models query' do
+
      end
    end
  end 
