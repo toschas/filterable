@@ -39,10 +39,6 @@ module Filterable
         expect(SimpleModel).not_to receive :by_name
         SimpleModel.filter(by_name: '')
       end
-
-      it 'supports joined models query' do
-
-      end
     end
   end
 end
