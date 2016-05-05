@@ -18,7 +18,8 @@ module Filterable
 
       it 'generates filter scopes for joined models' do
         user_filters = [:user_id, joins: :user]
-        another_model_filters = [:another_model_another_attribute, joins: :another_model]
+        another_model_filters = [:another_model_another_attribute, 
+                                 joins: :another_model]
         Generator.new(SimpleModel, user_filters).generate
         Generator.new(SimpleModel, another_model_filters).generate
 
@@ -31,6 +32,13 @@ module Filterable
         Generator.new(SimpleModel, filters).generate
 
         expect(SimpleModel).to respond_to :by_user_post_title
+      end
+
+      it 'generates custom filter method if custom option is sent' do
+        filters = [:custom_filter, custom: true]
+        Generator.new(SimpleModel, filters).generate
+
+        expect(SimpleModel).to respond_to :by_custom_filter
       end
     end
 

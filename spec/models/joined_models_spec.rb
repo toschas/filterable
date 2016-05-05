@@ -6,8 +6,10 @@ module Filterable
       schema_helper = SchemaHelper.new
       schema_helper.connect_to('sqlite3', ':memory:')
       schema_helper.generate_model('user', { name: 'string', email: 'text' })
-      schema_helper.generate_model('post', { title: 'string', body: 'text', user_id: 'integer' })
-      schema_helper.generate_model('comment', { body: 'text', author_id: 'integer' })
+      schema_helper.generate_model('post', { title: 'string', body: 'text', 
+                                             user_id: 'integer' })
+      schema_helper.generate_model('comment', { body: 'text', 
+                                                author_id: 'integer' })
       User.has_many :posts
       User.filter_by :name, :email
       User.filter_by :posts_title, joins: :posts
