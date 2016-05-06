@@ -16,6 +16,7 @@ class App
 
     def generate_schema
       SchemaHelper
+        .generate_model(:dashboard, { name: 'string', title: 'string' })
         .generate_model(:user, { name: 'string' }) 
         .generate_model(:role, { name: 'string' }) 
         .generate_model(:company, { name: 'string' }) 
