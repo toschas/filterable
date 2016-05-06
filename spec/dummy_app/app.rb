@@ -1,6 +1,6 @@
 require 'active_record'
 require_relative 'models'
-require 'support/schema_helper'
+require_relative 'schema_helper'
 
 class App
   class << self
