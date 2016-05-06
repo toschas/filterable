@@ -1,9 +1,11 @@
 require 'spec_helper'
+require 'dummy_app/app'
 
 module Filterable
   describe Base do
     before :all do 
       class SimpleModel < ActiveRecord::Base; end
+      App.init
     end
 
     it 'provides .filter_by to the model' do

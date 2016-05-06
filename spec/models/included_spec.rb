@@ -1,5 +1,5 @@
 require 'spec_helper'
-require 'support/schema_helper'
+require 'dummy_app/schema_helper'
 
 module Filterable
   describe 'Included Models' do
