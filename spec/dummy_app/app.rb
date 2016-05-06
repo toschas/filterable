@@ -17,20 +17,21 @@ class App
     def generate_schema
       SchemaHelper
         .generate_model(:dashboard, { name: 'string', title: 'string' })
-        .generate_model(:user, { name: 'string' }) 
+        .generate_model(:user, { name: 'string', email: 'string', 
+                                 role: 'references' }) 
         .generate_model(:role, { name: 'string' }) 
-        .generate_model(:company, { name: 'string' }) 
-        .generate_model(:project, { name: 'string' }) 
-        .generate_model(:task, { name: 'string' }) 
+        .generate_model(:company, { title: 'string' }) 
+        .generate_model(:project, { title: 'string', company: 'references' }) 
+        .generate_model(:task, { title: 'string', project: 'references' })
     end
 
     def create_models
-      3.times do |n|
-        User.create(name: "user#{n}")
+      2.times do |n|
         Role.create(name: "role#{n}")
-        Company.create(name: "company#{n}")
-        Project.create(name: "project#{n}")
-        Task.create(name: "task#{n}")
+        User.create(name: "user#{n}", )
+        Company.create(title: "company#{n}")
+        Project.create(title: "project#{n}")
+        Task.create(title: "task#{n}")
       end
     end
   end
