@@ -5,8 +5,7 @@ module Filterable
   describe 'Included Models' do
     describe '.filter' do
       before :all do
-        SchemaHelper.new
-          .connect_to('sqlite3', ':memory:')
+        SchemaHelper.connect_to('sqlite3', ':memory:')
           .generate_model('simple_model', { name: 'string', title: 'string' })
         Generator.new(SimpleModel, [:name, :title]).generate
         Generator.new(SimpleModel, [:custom_filter, custom: true]).generate

@@ -3,7 +3,7 @@ require 'spec_helper'
 module Filterable
   describe 'Joined Models' do
     before :all do
-      schema_helper = SchemaHelper.new
+      schema_helper = SchemaHelper
       schema_helper.connect_to('sqlite3', ':memory:')
       schema_helper.generate_model('user', { name: 'string', email: 'text' })
       schema_helper.generate_model('post', { title: 'string', body: 'text', 
