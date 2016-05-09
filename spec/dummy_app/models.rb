@@ -23,6 +23,7 @@ class Company < ActiveRecord::Base
 
   filter_by :title
   filter_by :projects_tasks_name, joins: { projects: :tasks }
+  filter_by :projects_deadline_on, joins: :projects
 end
 
 class Project < ActiveRecord::Base
@@ -30,6 +31,7 @@ class Project < ActiveRecord::Base
   has_many :tasks
 
   filter_by :tasks_title, joins: :tasks
+  filter_by :deadline_on
 end
 
 class Task < ActiveRecord::Base
@@ -37,5 +39,6 @@ class Task < ActiveRecord::Base
   belongs_to :user
 
   filter_by :user_id
+  filter_by :finished_at
 end
 
