@@ -13,20 +13,17 @@ module Filterable
 
       it 'generates filter scopes for joined models' do
         user_filters = [:user_id, joins: :user]
-        another_model_filters = [:another_model_another_attribute, 
-                                 joins: :another_model]
-        Generator.new(Dashboard, user_filters).generate
-        Generator.new(Dashboard, another_model_filters).generate
 
-        expect(Dashboard).to respond_to :by_user_id
-        expect(Dashboard).to respond_to :by_another_model_another_attribute
+        Generator.new(Role, user_filters).generate
+
+        expect(Role).to respond_to :by_user_id
       end
 
       it 'generates filter scopes for nested joined models' do
-        filters = [:user_post_title, joins: { user: :post }]
-        Generator.new(Dashboard, filters).generate
+        filters = [:projects_tasks_title, joins: { projects: :tasks }]
+        Generator.new(Company, filters).generate
 
-        expect(Dashboard).to respond_to :by_user_post_title
+        expect(Company).to respond_to :by_projects_tasks_title
       end
 
       it 'generates custom filter method if custom option is sent' do
@@ -35,7 +32,42 @@ module Filterable
 
         expect(Dashboard).to respond_to :by_custom_filter
       end
-    end
 
+      it 'generates from and to filters for date and datetime fields' do
+        Generator.new(Dashboard, [:configured_on, :created_at]).generate
+
+        expect(Dashboard).to respond_to :by_configured_on
+        expect(Dashboard).to respond_to :from_configured_on
+        expect(Dashboard).to respond_to :to_configured_on
+        expect(Dashboard).to respond_to :by_created_at
+        expect(Dashboard).to respond_to :from_created_at
+        expect(Dashboard).to respond_to :to_created_at
+      end
+
+      it 'generates from and to filters for integer fields' do
+        Generator.new(Dashboard, [:widgets_count]).generate
+
+        expect(Dashboard).to respond_to :by_widgets_count
+        expect(Dashboard).to respond_to :from_widgets_count
+        expect(Dashboard).to respond_to :to_widgets_count
+      end
+
+      it 'generates from and to filters for joined models' do
+        Generator.new(Project, [:tasks_finished_at, { joins: :tasks }]).generate
+
+        expect(Project).to respond_to :by_tasks_finished_at
+        expect(Project).to respond_to :from_tasks_finished_at
+        expect(Project).to respond_to :to_tasks_finished_at
+      end
+
+      it 'skips from and to filters for other types' do
+        Generator.new(Dashboard, [:title, :body]).generate
+
+        expect(Dashboard).not_to respond_to :from_title 
+        expect(Dashboard).not_to respond_to :from_body 
+        expect(Dashboard).not_to respond_to :to_title 
+        expect(Dashboard).not_to respond_to :to_body 
+      end
+    end
   end 
 end

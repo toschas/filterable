@@ -15,6 +15,15 @@ module Filterable
         end
       end
 
+      it 'queries from and to filters' do
+        params = { from_finished_at: Date.yesterday, to_finished_at: Date.tomorrow }
+
+        result = Task.filter params
+
+        expect(/\(finished_at > '#{Date.yesterday}'\)/.match(result.to_sql)).not_to be_nil
+        expect(/\(finished_at < '#{Date.tomorrow}'\)/.match(result.to_sql)).not_to be_nil
+      end
+
       it 'uses custom filter defined in the model' do
         params = { by_custom_filter: 'test' }
         result = User.filter params

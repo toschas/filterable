@@ -22,5 +22,13 @@ module Filterable
       expect(/JOIN "tasks"/.match(query)).not_to be_nil
       expect(/"tasks"."name" = 'test'/.match(query)).not_to be_nil
     end
+
+    it 'queries from and to filters for joined models' do
+      query = Company.filter(from_projects_deadline_on: Date.yesterday).to_sql
+
+      expect(/JOIN "projects"/.match(query)).not_to be_nil
+      expect(/\(projects.deadline_on > '#{Date.yesterday}'\)/.match(query))
+        .not_to be_nil
+    end
   end
 end
