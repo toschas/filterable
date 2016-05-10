@@ -63,6 +63,27 @@ module Filterable
               )
           }
         )
+        if range_filter?(attribute_name, association_name)
+          model.define_singleton_method(
+            "from_#{filter}",
+            ->(value) {
+              send(:joins, options[:joins])
+                .send(:where, 
+                      "#{association_name.to_s.pluralize}.#{attribute_name} > ?", 
+                      value)
+            }
+          )
+
+          model.define_singleton_method(
+            "to_#{filter}",
+            ->(value) {
+              send(:joins, options[:joins])
+                .send(:where, 
+                      "#{association_name.to_s.pluralize}.#{attribute_name} < ?", 
+                      value)
+            }
+          )
+        end
       end
     end
 
@@ -84,7 +105,26 @@ module Filterable
           "by_#{filter}", 
           ->(value) { send(:where, { filter => value }) }
         )
+        
+        if range_filter?(filter)
+          model.define_singleton_method(
+            "from_#{filter}", 
+            ->(value) { send(:where, "#{filter} > ?", value) }
+          )
+          model.define_singleton_method(
+            "to_#{filter}", 
+            ->(value) { send(:where, "#{filter} < ?", value) }
+          )
+        end
       end
+    end
+
+    def range_filter?(filter, model_name = nil)
+      model_name ||= model
+      [:date, :datetime, :integer].include?(
+        model_name.to_s.classify.constantize
+          .type_for_attribute(filter.to_s).type
+      )
     end
   end
 end
