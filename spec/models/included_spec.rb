@@ -27,7 +27,7 @@ module Filterable
       it 'uses custom filter defined in the model' do
         params = { by_custom_filter: 'test' }
         result = User.filter params
-        pattern = /WHERE \(name LIKE 'test'\)/
+        pattern = /WHERE \(name LIKE '%test'\)/
 
         expect(pattern.match(result.to_sql)).not_to be_nil
       end
