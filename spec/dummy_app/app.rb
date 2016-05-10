@@ -21,22 +21,23 @@ class App
                           configured_on: 'date', widgets_count: 'integer', 
                           created_at: 'datetime', updated_at: 'datetime' })
         .generate_model(:user, { name: 'string', email: 'string', 
-                                 role: 'references' }) 
+                                 role: 'references', company: 'references' }) 
         .generate_model(:role, { name: 'string' }) 
         .generate_model(:company, { title: 'string' }) 
         .generate_model(:project, { title: 'string', company: 'references', 
                                     deadline_on: 'date' }) 
         .generate_model(:task, { title: 'string', project: 'references', 
-                                 finished_at: 'datetime' })
+                                 user: 'references', finished_at: 'datetime' })
     end
 
     def create_models
       2.times do |n|
-        Role.create(name: "role#{n}")
-        User.create(name: "user#{n}", )
-        Company.create(title: "company#{n}")
-        Project.create(title: "project#{n}")
-        Task.create(title: "task#{n}")
+        date = n > 0 ? Date.today : Date.yesterday
+        role = Role.create(name: "role#{n}")
+        company = Company.create(title: "company#{n}")
+        user = User.create(name: "user#{n}", role: role, company: company )
+        project = Project.create(title: "project#{n}", company: company, deadline_on: date)
+        Task.create(title: "task#{n}", project: project, user: user, finished_at: date)
       end
     end
 

@@ -10,16 +10,20 @@ class User < ActiveRecord::Base
   filter_by :custom_filter, custom: true
 
   def self.by_custom_filter(value)
-    where('name LIKE ?', value)
+    where('name LIKE ?', "%#{value}")
   end
 end
 
 class Role <ActiveRecord::Base
-  has_one :user
+  has_many :users
+
+  filter_by :users_name, joins: :users
 end
 
 class Company < ActiveRecord::Base
   has_many :projects
+  has_many :users
+  has_many :tasks, through: :projects
 
   filter_by :title
   filter_by :projects_tasks_name, joins: { projects: :tasks }
@@ -30,7 +34,7 @@ class Project < ActiveRecord::Base
   belongs_to :company
   has_many :tasks
 
-  filter_by :tasks_title, joins: :tasks
+  filter_by :tasks_title, :tasks_finished_at, joins: :tasks
   filter_by :deadline_on
 end
 
