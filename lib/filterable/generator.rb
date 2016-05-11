@@ -21,7 +21,14 @@ module Filterable
         ->(filtering_params) {
           results = where(nil)
           filtering_params.each do |key, value|
-            next unless results.respond_to?(key) && value.present?
+            unless results.respond_to?(key)
+              if Filterable.configuration.ignore_unknown_filters
+                next
+              else
+                raise UnknownFilter, "Unknown filter received: #{key}"
+              end
+            end
+            next if value.blank? && Filterable.configuration.ignore_empty_values
             results = results.public_send(key, value)
           end
           results

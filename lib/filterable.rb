@@ -6,6 +6,7 @@ require "filterable/generator"
 require "filterable/configuration"
 
 module Filterable
+  UnknownFilter = Class.new(StandardError)
   Hook.init
 
   class << self
