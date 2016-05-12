@@ -47,11 +47,22 @@ module Filterable
     end
 
     def generate_empty_scopes
+      prefixes = custom_prefixes
       filters.each do |filter|
-        model.define_singleton_method(
-          "by_#{filter}", 
-          ->(value) { send(:where, nil) }
-        )
+        prefixes.each do |prefix|
+          model.define_singleton_method(
+            "#{prefix}_#{filter}", 
+            ->(value) { send(:where, nil) }
+          )
+        end
+      end
+    end
+
+    def custom_prefixes
+      if options[:prefix].present?
+        options[:prefix].is_a?(Array) ? options[:prefix] : [options[:prefix]]
+      else
+        ['by']
       end
     end
 

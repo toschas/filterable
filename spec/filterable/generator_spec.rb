@@ -33,6 +33,21 @@ module Filterable
         expect(Dashboard).to respond_to :by_custom_filter
       end
 
+      it 'generates custom filter with prefix is one given' do
+        filters = [:custom_filter, custom: true, prefix: :from]
+        Generator.new(Dashboard, filters).generate
+
+        expect(Dashboard).to respond_to :from_custom_filter
+      end
+
+      it 'can receive an array of prefixes for custom filters' do
+        filters = [:test_filter, custom: true, prefix: [:to, :recent]]
+        Generator.new(Dashboard, filters).generate
+
+        expect(Dashboard).to respond_to :to_test_filter
+        expect(Dashboard).to respond_to :recent_test_filter
+      end
+
       it 'generates from and to filters for date and datetime fields' do
         Generator.new(Dashboard, [:configured_on, :created_at]).generate
 
