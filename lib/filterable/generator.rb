@@ -1,3 +1,6 @@
+require_relative 'generators/custom'
+require_relative 'generators/simple'
+
 module Filterable
   class Generator
     attr_accessor :model, :filters, :options
@@ -38,31 +41,11 @@ module Filterable
 
     def generate_scopes
       if options[:custom]
-        generate_empty_scopes 
+        CustomGenerator.new(model, filters, options).generate
       elsif options[:joins].present?
         generate_joined_model_scopes(filters, options)
       else
-        generate_model_scopes(filters)
-      end
-    end
-
-    def generate_empty_scopes
-      prefixes = custom_prefixes
-      filters.each do |filter|
-        prefixes.each do |prefix|
-          model.define_singleton_method(
-            "#{prefix}_#{filter}", 
-            ->(value) { send(:where, nil) }
-          )
-        end
-      end
-    end
-
-    def custom_prefixes
-      if options[:prefix].present?
-        options[:prefix].is_a?(Array) ? options[:prefix] : [options[:prefix]]
-      else
-        ['by']
+        SimpleGenerator.new(model, filters, options).generate
       end
     end
 
@@ -115,26 +98,6 @@ module Filterable
 
     def joined_attribute_name(filter, association_name)
       filter.to_s.split("#{association_name}_").last
-    end
-
-    def generate_model_scopes(filters)
-      filters.each do |filter|
-        model.define_singleton_method(
-          "by_#{filter}", 
-          ->(value) { send(:where, { filter => value }) }
-        )
-        
-        if range_filter?(filter)
-          model.define_singleton_method(
-            "from_#{filter}", 
-            ->(value) { send(:where, "#{filter} > ?", value) }
-          )
-          model.define_singleton_method(
-            "to_#{filter}", 
-            ->(value) { send(:where, "#{filter} < ?", value) }
-          )
-        end
-      end
     end
 
     def range_filter?(filter, model_name = nil)
