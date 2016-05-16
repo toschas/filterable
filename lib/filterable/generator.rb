@@ -1,5 +1,7 @@
+require_relative 'generators/base'
 require_relative 'generators/custom'
 require_relative 'generators/simple'
+require_relative 'generators/joined'
 
 module Filterable
   class Generator
@@ -41,71 +43,12 @@ module Filterable
 
     def generate_scopes
       if options[:custom]
-        CustomGenerator.new(model, filters, options).generate
+        Generators::Custom.new(model, filters, options).generate
       elsif options[:joins].present?
-        generate_joined_model_scopes(filters, options)
+        Generators::Joined.new(model, filters, options).generate
       else
-        SimpleGenerator.new(model, filters, options).generate
+        Generators::Simple.new(model, filters, options).generate
       end
-    end
-
-    def generate_joined_model_scopes(filters, options)
-      association_name = joined_association_name(options[:joins])
-      filters.each do |filter|
-        attribute_name = joined_attribute_name(filter, association_name)
-        model.define_singleton_method(
-          "by_#{filter}",
-          ->(value) {
-            send(:joins, options[:joins])
-              .send(:where, 
-                { association_name.to_s.pluralize => { 
-                  attribute_name => value } 
-                }
-              )
-          }
-        )
-        if range_filter?(attribute_name, association_name)
-          model.define_singleton_method(
-            "from_#{filter}",
-            ->(value) {
-              send(:joins, options[:joins])
-                .send(:where, 
-                      "#{association_name.to_s.pluralize}.#{attribute_name} > ?", 
-                      value)
-            }
-          )
-
-          model.define_singleton_method(
-            "to_#{filter}",
-            ->(value) {
-              send(:joins, options[:joins])
-                .send(:where, 
-                      "#{association_name.to_s.pluralize}.#{attribute_name} < ?", 
-                      value)
-            }
-          )
-        end
-      end
-    end
-
-    def joined_association_name(join_options)
-      if join_options.is_a?(Hash) 
-        joined_association_name(join_options.values.last) 
-      else
-        join_options
-      end
-    end
-
-    def joined_attribute_name(filter, association_name)
-      filter.to_s.split("#{association_name}_").last
-    end
-
-    def range_filter?(filter, model_name = nil)
-      model_name ||= model
-      [:date, :datetime, :integer].include?(
-        model_name.to_s.classify.constantize
-          .type_for_attribute(filter.to_s).type
-      )
     end
   end
 end
