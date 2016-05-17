@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = %q{Providing easy filtering of Active Record objects.}
   spec.description   = %q{Providing easy filtering of Active Record objects.}
-  spec.homepage      = ""
+  spec.homepage      = "https://github.com/toschas/filterable"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org by setting 'allowed_push_host', or
