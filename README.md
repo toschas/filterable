@@ -52,7 +52,7 @@ The right way (more secure) would be using strong params so you control what can
 ```ruby
 class UsersController < ApplicationController
     def index
-        @users = Users.filter(filter_params)
+        @users = User.filter(filter_params)
     end
     
     protected
