@@ -1,22 +1,9 @@
 module Generators
   class Joined < Base
     def generate
-      options = self.options
-      relation_name = joined_relation_name
       filters.each do |filter|
         field = joined_field(filter)
-        model.define_singleton_method(
-          "by_#{filter}",
-          ->(value) {
-            send(:joins, options[:joins])
-            .send(:where, 
-                  { relation_name.to_s.pluralize => { 
-              field => value } 
-            }
-                 )
-          }
-        )
-
+        generate_joined_filter(filter, field, relation_name, options[:joins])
         if range_filter?(field)
           generate_range_filter(filter, field, relation_name, options[:joins])
         end
@@ -24,6 +11,20 @@ module Generators
     end
 
     private
+
+    def generate_joined_filter(filter, field, relation_name, join_options)
+      model.define_singleton_method(
+        "by_#{filter}",
+        ->(value) {
+          send(:joins, join_options)
+          .send(:where, 
+                { relation_name.to_s.pluralize => { 
+            field => value } 
+          }
+               )
+        }
+      )
+    end
 
     def generate_range_filter(filter, field, relation_name, join_options)
       model.define_singleton_method(
@@ -47,7 +48,7 @@ module Generators
       )
     end
 
-   
+
     def extract_relations(join_options)
       if join_options.is_a?(Hash)
         join_options.flat_map{|k, v| [k, *extract_relations(v)]}
@@ -60,17 +61,17 @@ module Generators
       @relations ||= extract_relations(options[:joins])
     end
 
-    def joined_relation_name
-      @joined_relation_name ||= relations.last
+    def relation_name
+      @relation_name ||= relations.last
     end
 
     def joined_field(filter)
-      filter.to_s.split("#{joined_relation_name}_").last
+      filter.to_s.split("#{relation_name}_").last
     end
 
     def range_filter?(filter)
       range_types.include?(
-        joined_relation_name.to_s.classify.constantize
+        relation_name.to_s.classify.constantize
         .type_for_attribute(filter.to_s).type
       )
     end
