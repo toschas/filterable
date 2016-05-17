@@ -59,6 +59,17 @@ module Filterable
         expect(Dashboard).to respond_to :to_created_at
       end
 
+      it 'generates from and to filters for float and decimal fields' do
+        Generator.new(Task, [:logged_amount, :logged_hours]).generate
+
+        expect(Task).to respond_to :by_logged_amount
+        expect(Task).to respond_to :from_logged_amount
+        expect(Task).to respond_to :to_logged_amount
+        expect(Task).to respond_to :by_logged_hours
+        expect(Task).to respond_to :from_logged_hours
+        expect(Task).to respond_to :to_logged_hours
+      end
+
       it 'generates from and to filters for integer fields' do
         Generator.new(Dashboard, [:widgets_count]).generate
 

@@ -14,7 +14,7 @@ module Generators
     private
 
     def range_types
-      [:date, :datetime, :integer]
+      [:date, :datetime, :integer, :float, :decimal]
     end
   end
 end

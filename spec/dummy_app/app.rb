@@ -27,7 +27,9 @@ class App
         .generate_model(:project, { title: 'string', company: 'references', 
                                     deadline_on: 'date' }) 
         .generate_model(:task, { title: 'string', project: 'references', 
-                                 user: 'references', finished_at: 'datetime' })
+                                 user: 'references', finished_at: 'datetime', 
+                                 logged_hours: 'float', 
+                                 logged_amount: 'decimal' })
     end
 
     def create_models
@@ -36,8 +38,11 @@ class App
         role = Role.create(name: "role#{n}")
         company = Company.create(title: "company#{n}")
         user = User.create(name: "user#{n}", role: role, company: company )
-        project = Project.create(title: "project#{n}", company: company, deadline_on: date)
-        Task.create(title: "task#{n}", project: project, user: user, finished_at: date)
+        project = Project.create(title: "project#{n}", company: company, 
+                                 deadline_on: date)
+        Task.create(title: "task#{n}", project: project, user: user, 
+                    finished_at: date, logged_hours: 4.5, 
+                    logged_amount: 149.985)
       end
     end
 
