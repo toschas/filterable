@@ -46,6 +46,7 @@ User.filter(by_active: true, by_user_type: 'customer').where('email LIKE ?', '%@
 
 ### Using in Controller (Rails)
 You can just pass params hash to `filter` method. It will ignore keys that are not defined in the model by default.
+
 The right way (more secure) would be using strong params so you control what can be passed to filter.
 
 ```ruby
@@ -64,6 +65,7 @@ end
 
 ### Range Filters
 For comparable types of fields (numeric values, date or datetime) `from` and `to` filters are also generated
+
 ```ruby
 class User < ActiveRecord::Base
     filter_by :registered_on, :tasks_assigned
@@ -84,8 +86,10 @@ User.filter(to_registered_on: Date.today) # retuns users registered before today
 
 ### Filter by related model attribute
 Filtering by attributes of another model is possible with `joins` option.
-**Names of joined models follow the same pattern as when defining relations: singular for 'belongs_to' and 'has_one', and plural for 'has_many'.
-Filters must also be named accordingly: `:user_email, joins: :user` and `:tasks_title, joins: :tasks`**
+
+**Names of joined models follow the same pattern as when defining relations: singular for 'belongs_to' and 'has_one', and plural for 'has_many'.**
+
+**Filters must also be named accordingly: `:user_email, joins: :user` and `:tasks_title, joins: :tasks`**
 
 ```ruby
 class Task < ActiveRecord::Base
@@ -106,6 +110,7 @@ Task.filter(by_user_email: 'test@example.com') # returns tasks where user email 
 
 
 Filtering through two or more related models works the same way, `joins` options must be specified the same way as passing it to `.joins()` method.
+
 So if you want to filter `Company` by task title and you need to join tasks through users, format the option the same way you would tell ActiveRecord
 how to join the tables, and name the filter accordingly.
 
@@ -123,7 +128,9 @@ Company.filter(by_user_tasks_title: 'test')
 ```
 
 ### Custom Filters
-By passing `custom: true` option an empty custom filter will be defined. It can than be overridden with a scope or a class method.
+By passing `custom: true` option an empty custom filter will be defined. 
+
+It can than be overridden with a scope or a class method.
 
 ```ruby
 class Task < ActiveRecord::Base
@@ -142,6 +149,7 @@ filter_by :custom_filter, custom: true, prefix: [:by, :recent] # generates by_cu
 ```
 
 **`joins` option is ignored if `custom: true` is passed**
+
 **`prefix` option is ignored if `custom: true` is not passed**
 
 ## License
