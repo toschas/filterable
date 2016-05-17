@@ -7,5 +7,14 @@ module Generators
       @filters = filters
       @options = options
     end
+
+    def generate
+    end
+
+    private
+
+    def range_types
+      [:date, :datetime, :integer]
+    end
   end
 end
