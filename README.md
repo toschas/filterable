@@ -24,8 +24,8 @@ Or install it yourself as:
 Filterable provides `filter_by` method to ActiveRecord Objects which lets you define attributes to be filtered by:
 
 ```ruby
-class Post < ActiveRecord::Base
-  filter_by :active, :published
+class User < ActiveRecord::Base
+  filter_by :active, :user_type
 end
 ```
 
