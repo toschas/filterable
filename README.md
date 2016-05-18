@@ -1,6 +1,10 @@
 # Filterable
 
-Filterable is a ruby gem providing easy filtering of Active Record objects.
+Filterable gem aims to simplify the process of filtering active record objects. 
+
+It provides an easy way to define filters on the model (without having to write scopes) and apply them on any active record collection.
+
+See [Defining Filters](#defining-filters), [Filtering objects](#filtering-objects) and [Using in Controller (Rails)](#using-in-controller-rails) for the main focus of the gem.
 
 ## Installation
 
@@ -160,6 +164,13 @@ filter_by :cutom_filter, custom: true, prefix: :none # generates custom_filter f
 **`joins` option is ignored if `custom: true` is passed**
 
 **`prefix` option is ignored if `custom: true` is not passed**
+
+## Issues
+Bug reports and feature proposals are always welcome. Feel free to open an issue.
+
+## Contributing
+Please see [contributing guide](https://github.com/toschas/filterable/blob/master/CONTRIBUTING.md)
+
 
 ## License
 
