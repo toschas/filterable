@@ -30,10 +30,13 @@ end
 ```
 
 ### Filtering objects
+Filterable will generate those methods on User class in the example above which can be used directly or passed to `filter` method as a hash of filters.
 
 ```ruby
 User.filter(by_active: true, by_user_type: 'customer') # returns users where active is true and user type is equal to 'customer'
+User.by_active(true).by_user_type('customer') # same thing
 ```
+
 Method is available on an AR Collection and it returns an AR collection so it can be chained with other methods.
 
 ```ruby
@@ -45,9 +48,11 @@ User.filter(by_active: true, by_user_type: 'customer').where('email LIKE ?', '%@
 ```
 
 ### Using in Controller (Rails)
-You can just pass params hash to `filter` method. It will ignore keys that are not defined in the model by default.
+You can pass a hash to the `filter` method, like the parameters hash in rails. It will ignore keys that are not defined in the model by default.
 
-The right way (more secure) would be using strong params so you control what can be passed to filter.
+**Important - you should always control parameters coming from the request, so the same applies to the `filter` method.**
+
+The right way in rails would be using strong parameters so you can control what can be passed to the filter.
 
 ```ruby
 class UsersController < ApplicationController
@@ -77,7 +82,8 @@ Presuming that 'registered_on' is a date and 'tasks_assigned' is an integer, the
  - from_registered_on (attribute value is greather than the value passed)
  - to_registered_on (attribute value is smaller than the value passed)
  
- and the same for 'tasks_assigned' attribute. So for example: 
+ 
+and the same for 'tasks_assigned' attribute. So for example: 
 
 ```ruby
 User.filter(from_tasks_assigned: 2) # returns users with more than 2 tasks assigned
@@ -141,11 +147,14 @@ class Task < ActiveRecord::Base
 end
 ```
 
-By default `by_` prefix will be used. It can be changed by passing an option
+Custom filters support `prefix` option which can be a symbol, an array, or `:none` explicitly.
+If `prefix` option is not present `by` prefix will be used.
 
 ```ruby
-filter_by :fuzzy_title, custom: true, prefix: :where # generates where_fuzzy_title filter
+filter_by :custom_filter, custom: true # generates by_custom_filter filter
+filter_by :custom_filter, custom: true, prefix: :where # generates where_custom_filter filter
 filter_by :custom_filter, custom: true, prefix: [:by, :recent] # generates by_custom_filter and recent_custom_filter filters
+filter_by :cutom_filter, custom: true, prefix: :none # generates custom_filter filter
 ```
 
 **`joins` option is ignored if `custom: true` is passed**

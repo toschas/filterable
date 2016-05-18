@@ -48,6 +48,14 @@ module Filterable
         expect(Dashboard).to respond_to :recent_test_filter
       end
 
+      it 'creates filters without prefix if :none option is passed' do
+        filters = [:without_prefix_filter, custom: true, prefix: :none]
+        Generator.new(Dashboard, filters).generate
+
+        expect(Dashboard).to respond_to :without_prefix_filter
+        expect(Dashboard).not_to respond_to :by_without_prefix_filter
+      end 
+
       it 'generates from and to filters for date and datetime fields' do
         Generator.new(Dashboard, [:configured_on, :created_at]).generate
 

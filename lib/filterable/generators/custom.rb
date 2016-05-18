@@ -4,8 +4,9 @@ module Generators
       prefixes = custom_prefixes
       filters.each do |filter|
         prefixes.each do |prefix|
+          filter_name = prefix == :none ? "#{filter}" : "#{prefix}_#{filter}"
           model.define_singleton_method(
-            "#{prefix}_#{filter}", 
+            filter_name, 
             ->(value) { send(:where, nil) }
           )
         end
@@ -13,11 +14,12 @@ module Generators
     end
 
     def custom_prefixes
-      if options[:prefix].present?
-        options[:prefix].is_a?(Array) ? options[:prefix] : [options[:prefix]]
-      else
-        ['by']
-      end
+      prefix = options[:prefix].blank? ? 'by' : options[:prefix]
+      ensure_prefix_array(prefix)
+    end
+
+    def ensure_prefix_array(prefix)
+      prefix.is_a?(Array) ? prefix.reject(&:blank?) : [prefix]
     end
   end
 end
