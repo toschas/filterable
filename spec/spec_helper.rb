@@ -1,4 +1,4 @@
-require 'filterable'
+require 'toschas-filterable'
 require 'dummy_app/app'
 
 RSpec.configure do |config|

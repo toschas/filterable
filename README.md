@@ -13,7 +13,7 @@ See [Defining Filters](#defining-filters), [Filtering objects](#filtering-object
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'filterable'
+gem 'toschas-filterable'
 ```
 
 And then execute:
@@ -22,7 +22,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install filterable
+    $ gem install toschas-filterable
 
 ## Usage
 

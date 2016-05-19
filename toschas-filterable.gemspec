@@ -1,10 +1,10 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'filterable/version'
+require 'toschas/filterable/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "filterable"
+  spec.name          = "toschas-filterable"
   spec.version       = Filterable::VERSION
   spec.authors       = ["Darjan Vukusic"]
   spec.email         = ["darjan.vukusic@gmail.com"]

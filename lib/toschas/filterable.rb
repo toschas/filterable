@@ -1,9 +1,9 @@
-require "filterable/version"
+require "toschas/filterable/version"
 require "active_record"
-require "filterable/base"
-require "filterable/hook"
-require "filterable/generator"
-require "filterable/configuration"
+require "toschas/filterable/base"
+require "toschas/filterable/hook"
+require "toschas/filterable/generator"
+require "toschas/filterable/configuration"
 
 module Filterable
   UnknownFilter = Class.new(StandardError)
