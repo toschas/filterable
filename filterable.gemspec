@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Darjan Vukusic"]
   spec.email         = ["darjan.vukusic@gmail.com"]
 
-  spec.summary       = %q{Providing easy filtering of Active Record objects.}
-  spec.description   = %q{Providing easy filtering of Active Record objects.}
+  spec.summary       = %q{Easy filtering of Active Record objects}
+  spec.description   = %q{Filterable gem aims to simplify the process of filtering active record objects.It provides an easy way to define filters on the model (without having to write scopes) and apply them on any active record collection.}
   spec.homepage      = "https://github.com/toschas/filterable"
   spec.license       = "MIT"
 
