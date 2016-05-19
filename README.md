@@ -1,4 +1,6 @@
-# Filterable [![Build Status](https://travis-ci.org/toschas/filterable.svg?branch=master)](https://travis-ci.org/toschas/filterable)
+# Filterable 
+[![Build Status](https://travis-ci.org/toschas/filterable.svg?branch=master)](https://travis-ci.org/toschas/filterable)
+[![Code Climate](https://codeclimate.com/github/toschas/filterable/badges/gpa.svg)](https://codeclimate.com/github/toschas/filterable)
 
 Filterable gem aims to simplify the process of filtering active record objects. 
 
