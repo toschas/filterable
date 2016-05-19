@@ -27,22 +27,19 @@ module Generators
     end
 
     def generate_range_filter(filter, field, relation_name, join_options)
-      model.define_singleton_method(
-        "from_#{filter}",
-        ->(value) {
-          send(:joins, join_options)
-          .send(:where, 
-                "#{relation_name.to_s.pluralize}.#{field} > ?", 
-          value)
-        }
-      )
+      define_range_filter(:from, filter, field, relation_name, join_options)
+      define_range_filter(:to, filter, field, relation_name, join_options)
+    end
+
+    def define_range_filter(prefix, filter, field, relation_name, join_options)
+      operand = prefix == :from ? '>' : '<'
 
       model.define_singleton_method(
-        "to_#{filter}",
+        "#{prefix}_#{filter}",
         ->(value) {
           send(:joins, join_options)
           .send(:where, 
-                "#{relation_name.to_s.pluralize}.#{field} < ?", 
+                "#{relation_name.to_s.pluralize}.#{field} #{operand} ?", 
           value)
         }
       )

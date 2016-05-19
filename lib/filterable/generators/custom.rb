@@ -7,7 +7,7 @@ module Generators
           filter_name = prefix == :none ? "#{filter}" : "#{prefix}_#{filter}"
           model.define_singleton_method(
             filter_name, 
-            ->(value) { send(:where, nil) }
+            ->(_value) { send(:where, nil) }
           )
         end
       end
