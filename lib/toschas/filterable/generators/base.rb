@@ -13,6 +13,16 @@ module Generators
 
     private
 
+    def table_loaded?
+      model.table_exists?
+    rescue ActiveRecord::NoDatabaseError, ActiveRecord::StatementInvalid
+      false
+    end
+
+    def relation
+      model
+    end
+
     def range_types
       [:date, :datetime, :integer, :float, :decimal]
     end

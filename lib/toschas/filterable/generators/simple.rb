@@ -7,7 +7,7 @@ module Generators
           ->(value) { send(:where, { filter => value }) }
         )
 
-        generate_range_filter(filter) if range_filter?(filter)
+        generate_range_filter(filter) if table_loaded? && range_filter?(filter)
       end
     end
 

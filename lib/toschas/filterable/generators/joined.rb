@@ -4,13 +4,17 @@ module Generators
       filters.each do |filter|
         field = joined_field(filter)
         generate_joined_filter(filter, field, relation_name, options[:joins])
-        if range_filter?(field)
+        if table_loaded? && range_filter?(field)
           generate_range_filter(filter, field, relation_name, options[:joins])
         end
       end
     end
 
     private
+
+    def relation
+      relation_name.to_s.classify.constantize
+    end
 
     def generate_joined_filter(filter, field, relation_name, join_options)
       model.define_singleton_method(

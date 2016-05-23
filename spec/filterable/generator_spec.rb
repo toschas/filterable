@@ -102,6 +102,29 @@ module Filterable
         expect(Dashboard).not_to respond_to :to_title 
         expect(Dashboard).not_to respond_to :to_body 
       end
+
+      describe 'if database is not loaded' do
+        before do
+          allow(ActiveRecord::Base).to receive(:table_exists?).and_return false
+          allow(ActiveRecord::Base).to receive(:type_for_attribute).and_raise(ActiveRecord::NoDatabaseError, 'test')
+        end
+
+        it 'ignores range filters' do
+          Generator.new(Dashboard, [:updated_at]).generate
+
+          expect(Dashboard).to respond_to :by_updated_at
+          expect(Dashboard).not_to respond_to :from_updated_at
+          expect(Dashboard).not_to respond_to :to_updated_at
+        end
+
+        it 'ignores range filters for joined models' do
+          Generator.new(Task, [:project_updated_at, { joins: :project }]).generate
+
+          expect(Task).to respond_to :by_project_updated_at
+          expect(Task).not_to respond_to :from_project_updated_at
+          expect(Task).not_to respond_to :to_project_updated_at
+        end
+      end
     end
   end 
 end
